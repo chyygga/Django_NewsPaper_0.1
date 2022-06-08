@@ -1,0 +1,49 @@
+{% extends 'news/default.html' %}
+{% load custom_filters %}
+
+{% block title%}{{title}}{% endblock title %}
+
+{% block content%}
+<div>
+    <h1>Posts</h1>
+    <h3>Количество всех новостей/статей: {{posts|length}}</h3>
+    <hr>
+    {% if posts %}
+        {% for p in posts %}
+            <a href="{% url 'index' p.id %}">{{p.title|censor:5}}</a><br>
+            <a href="{% url 'post_update' p.id %}"><u>Редактировать</u></a>&nbsp;
+            <a href="{% url 'post_delete' p.id %}"><u>Удалить</u></a>
+            <h3>Заголовок:&nbsp;{{p.title|censor:3}}</h3>
+            <p>Текст статьи:&nbsp;{{p.text|truncatechars:10}}</p>
+            <p>Дата создания:&nbsp;{{p.created|date:'M d Y'}}</p>
+            <hr>
+        {% endfor %}
+    <a href="{% url 'add' %}">Добавить запись</a><br>
+    {% if is_paginated %}
+    <nav class="list-pages">
+        <ul>
+            {% if page_obj.has_previous %}
+                <a href="?page=1">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+            {% endif %}
+            {% for p in paginator.page_range %}
+            {% if page_obj.number == p %}
+            <li class="page-num page-num-selected">{{p}}</li>
+            {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+            <li class="page-num">
+                <a href="?page={{p}}">{{p}}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">>>></a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+        {% else %}
+            <h1>Ничего нет</h1>
+        {% endif %}
+</div>
+{% endblock %}

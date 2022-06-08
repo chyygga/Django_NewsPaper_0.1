@@ -1,0 +1,15 @@
+{% extends 'news/default.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h2>Вы действительно хотите удалить запись?</h2>
+        <P>{{post.created}}</P>
+        <h1>{{post.title}}</h1>
+        <P>{{post.text}}</P>
+        <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="подтвердить"></form>
+    </div>
+{% endblock %}

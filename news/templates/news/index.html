@@ -1,0 +1,11 @@
+{% extends 'news/default.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <P>{{post.created}}</P>
+        <h1>{{post.title}}</h1>
+        <P>{{post.text}}</P>
+    </div>
+{% endblock %}
