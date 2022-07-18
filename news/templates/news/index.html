@@ -4,8 +4,10 @@
 
 {% block content %}
     <div class="features">
-        <P>{{post.created}}</P>
         <h1>{{post.title}}</h1>
         <P>{{post.text}}</P>
+        <P>{{post.author}}</P>
+        <P>{{post.created}}</P>
+        <p>{{post.id}}</p>
     </div>
 {% endblock %}

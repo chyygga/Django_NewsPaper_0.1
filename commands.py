@@ -84,3 +84,8 @@ for comment in Comment.objects.filter(post=best_article):
     print("Комментарий:", comment.text)
 
 
+cats = Category.objects.all()
+for cat in cats:
+    for users in cat.subscribes.all():
+
+        print(cat.name, users.username)

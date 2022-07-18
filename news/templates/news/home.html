@@ -2,7 +2,9 @@
 {% load custom_filters %}
 
 {% block title%}{{title}}{% endblock title %}
-
+{% if not author %}
+<button> <a href="sign/upgrade/">Стать автором</a> </button>
+{% endif %}
 {% block content%}
 <div>
     <h1>Posts</h1>
@@ -16,6 +18,7 @@
             <h3>Заголовок:&nbsp;{{p.title|censor:3}}</h3>
             <p>Текст статьи:&nbsp;{{p.text|truncatechars:10}}</p>
             <p>Дата создания:&nbsp;{{p.created|date:'M d Y'}}</p>
+
             <hr>
         {% endfor %}
     <a href="{% url 'add' %}">Добавить запись</a><br>

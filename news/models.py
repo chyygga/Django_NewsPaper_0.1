@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
+
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -13,12 +15,29 @@ class Author(models.Model):
         self.rating = new_rating
         self.save()
 
+    class Meta:
+        verbose_name = 'Авторы'
+        verbose_name_plural = 'Авторы'
+        ordering = ['rating']
+
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    subscribes = models.ManyToManyField(User)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Категории'
+        verbose_name_plural = 'Категории'
+        ordering = ['name']
+
+
+# def cat_sub():
+#     cats = Category.objects.all()
+#     for cat in cats[0].subscribes.all():
+#         return cat.username
 
 
 class Post(models.Model):
@@ -38,6 +57,9 @@ class Post(models.Model):
     text = models.TextField()
     rating = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.title
+
     def like(self):
         self.rating += 1
         self.save()
@@ -50,10 +72,20 @@ class Post(models.Model):
         size = 124 if len(self.text) > 124 else len(self.text)
         return self.text[:size] + '...'
 
+    class Meta:
+        verbose_name = 'Посты'
+        verbose_name_plural = 'Посты'
+        ordering = ['-created']
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Категории статей'
+        verbose_name_plural = 'Категории статей'
+        ordering = ['post']
 
 
 class Comment(models.Model):
@@ -70,4 +102,3 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
-

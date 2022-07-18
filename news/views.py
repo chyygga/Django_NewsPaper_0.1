@@ -5,6 +5,7 @@ from .filters import PostFilter
 from .forms import AddPostForm
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+# from protect.views import IndexView
 
 
 class NewsSearch(ListView):
@@ -27,13 +28,30 @@ class NewsHome(LoginRequiredMixin, ListView):
     queryset = Post.objects.order_by('-created')
     paginate_by = 2
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name='author').exists()
+        return context
 
-class NewsDetail(DetailView):
+
+class NewsDetail(LoginRequiredMixin, DetailView):
     template_name = 'news/index.html'
     queryset = Post.objects.all()
 
 
-class AddPost(PermissionRequiredMixin, CreateView):
+    # def posts_cats(self):
+    #     for post in self.queryset:
+    #         return post.id
+
+    # def subscribe(self, request):
+    #     user = request.user
+    #     sub_cat = Category.objects.get(name='author')
+    #     if not request.user.groups.filter(name='author').exists():
+    #         author_group.user_set.add(user)
+    #     return redirect('/')
+
+
+class AddPost(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = AddPostForm
     template_name = 'news/add.html'
     extra_context = {'title': 'Add Post'}
@@ -54,9 +72,15 @@ class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         return Post.objects.get(pk=id)
 
 
-class NewsDelete(DeleteView):
+class NewsDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'news/news_delete.html'
     queryset = Post.objects.all()
     success_url = reverse_lazy('home')
+    permission_required = ('news.delete_post',
+                           )
+
+
+
+
 
 
