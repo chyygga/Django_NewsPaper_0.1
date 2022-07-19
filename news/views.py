@@ -5,6 +5,8 @@ from .filters import PostFilter
 from .forms import AddPostForm
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+
+
 # from protect.views import IndexView
 
 
@@ -38,17 +40,21 @@ class NewsDetail(LoginRequiredMixin, DetailView):
     template_name = 'news/index.html'
     queryset = Post.objects.all()
 
-
-    # def posts_cats(self):
-    #     for post in self.queryset:
-    #         return post.id
-
-    # def subscribe(self, request):
+    def subscribe(request, **kwargs):
+        post = Post.objects.get(pk=kwargs['pk'])
+        user = request.user
+        for category in post.cats.all():
+            if user not in category.subscribes.all():
+                category.subscribes.add(user)
+        return reverse_lazy('index')
+    #
+    # def unsubscribe(request, **kwargs):
+    #     post = Post.objects.get(pk=kwargs['pk'])
     #     user = request.user
-    #     sub_cat = Category.objects.get(name='author')
-    #     if not request.user.groups.filter(name='author').exists():
-    #         author_group.user_set.add(user)
-    #     return redirect('/')
+    #     for category in post.cats.all():
+    #         if user in category.subscribers.all():
+    #             category.subscribers.remove(user)
+    #     return reverse_lazy('index')
 
 
 class AddPost(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -78,9 +84,3 @@ class NewsDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     success_url = reverse_lazy('home')
     permission_required = ('news.delete_post',
                            )
-
-
-
-
-
-

@@ -4,10 +4,20 @@
 
 {% block content %}
     <div class="features">
-        <h1>{{post.title}}</h1>
-        <P>{{post.text}}</P>
-        <P>{{post.author}}</P>
-        <P>{{post.created}}</P>
-        <p>{{post.id}}</p>
+        <h1>Заголовок: {{post.title}}</h1>
+        <P>Текст: {{post.text}}</P>
+        <P>Автор: {{post.author}}</P>
+        <P>Дата создания: {{post.created}}</P>
     </div>
+    <p>
+        Категории:
+        {% for category in post.cats.all %}
+            <br><strong>{{ category }}</strong>
+            {% if not user in category.subscribes.all %}
+                <button><a href="">Subscribe</a></button>
+            {% else %}
+                <button><a href="">Unsubscribe</a></button>
+            {%endif%}
+        {% endfor %}
+    </p>
 {% endblock %}
