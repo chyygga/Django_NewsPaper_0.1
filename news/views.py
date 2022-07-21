@@ -1,12 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-
 from .filters import PostFilter
 from .forms import AddPostForm
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-
 # from protect.views import IndexView
 
 
@@ -40,13 +37,6 @@ class NewsDetail(LoginRequiredMixin, DetailView):
     template_name = 'news/index.html'
     queryset = Post.objects.all()
 
-    def subscribe(request, **kwargs):
-        post = Post.objects.get(pk=kwargs['pk'])
-        user = request.user
-        for category in post.cats.all():
-            if user not in category.subscribes.all():
-                category.subscribes.add(user)
-        return reverse_lazy('index')
     #
     # def unsubscribe(request, **kwargs):
     #     post = Post.objects.get(pk=kwargs['pk'])
@@ -64,6 +54,9 @@ class AddPost(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('home')
     permission_required = ('news.add_post',
                            )
+    # def get_author(self):
+    #     author = self.request.user
+    #     return author
 
 
 class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -84,3 +77,12 @@ class NewsDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     success_url = reverse_lazy('home')
     permission_required = ('news.delete_post',
                            )
+
+# def get_post_cat(request, **kwargs):
+#     cats = Category.objects.get(pk=kwargs['pk'])
+#     user = request.user
+#     for category in cats:
+#         if user not in category.subscribes.all():
+#             category.subscribes.add(user)
+#     return reverse_lazy('index')
+
