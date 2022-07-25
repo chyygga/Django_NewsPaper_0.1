@@ -7,18 +7,16 @@
 {% endif %}
 {% block content%}
 <div>
-    <h1>Posts</h1>
+    <h1></h1>
     <h3>Количество новостей/статей на странице: {{ posts|length }}</h3>
     <hr>
     {% if posts %}
         {% for p in posts %}
-            <a href="{% url 'index' p.id %}">{{p.title|censor:5}}</a><br>
-            <a href="{% url 'post_update' p.id %}"><u>Редактировать</u></a>&nbsp;
-            <a href="{% url 'post_delete' p.id %}"><u>Удалить</u></a>
-            <h3>Заголовок:&nbsp;{{p.title|censor:3}}</h3>
-            <p>Текст статьи:&nbsp;{{p.text|truncatechars:10}}</p>
+            <a href="{% url 'index' p.pk %}"><h>Заголовок:&nbsp;</h>{{p.title|censor:5}}</a><br>
+            <h>Текст статьи:&nbsp;{{p.text|truncatechars:10}}</h>
             <p>Дата создания:&nbsp;{{p.created|date:'M d Y'}}</p>
-            <hr>
+            <a href="{% url 'post_update' p.pk %}"><u>Редактировать</u></a>&nbsp;
+            <a href="{% url 'post_delete' p.pk %}"><u>Удалить</u></a><hr>
         {% endfor %}
         {% if is_paginated %}
     <nav class="list-pages">

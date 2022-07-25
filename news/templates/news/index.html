@@ -10,7 +10,7 @@
         <P>Дата создания: {{post.created}}</P>
     </div>
     <p>
-        Категории:
+        Категории поста:
         {% for category in post.cats.all %}
             <br><strong>{{ category }}</strong>
             {% if not user in category.subscribes.all %}

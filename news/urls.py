@@ -6,6 +6,7 @@ urlpatterns = [
     path('add/', AddPost.as_view(), name='add'),
     path('search/', NewsSearch.as_view(), name='search'),
     path('<int:pk>/', NewsDetail.as_view(), name='index'),
+    path('<int:pk>/int:sub/', AddSub.as_view(), name='add_sub'),
     path('<int:pk>/edit/', NewsUpdate.as_view(), name='post_update'),
     path('<int:pk>/delete', NewsDelete.as_view(), name='post_delete'),
 ]
