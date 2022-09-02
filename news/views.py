@@ -70,12 +70,20 @@ class NewsDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     permission_required = ('news.delete_post',
                            )
 
+class SubMe(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    success_url = reverse_lazy('index')
+    permission_required = ('news.change_post',
+                           )
+    def sub(self, **kwargs):
+        cat = Category.objects.get('category.pk')
+        user = User.objects.get(user_id='user.pk')
+        return cat.subscribes.add(user)
 
-@login_required
-def sub_me(request):
-    user = User.objects.get(pk='user.pk')
-    cat = Category.objects.get(pk='category.pk')
-    cat.subscribes.add(user)
 
-    return redirect('/')
+    pass
+    # user = User.objects.get(pk='user.pk')
+    # cat = Category.objects.get(pk='category.pk')
+    # cat.subscribes.add(user)
+    #
+    # return redirect('/')
 
