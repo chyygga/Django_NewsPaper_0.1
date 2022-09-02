@@ -9,12 +9,11 @@
         <P>Автор: {{post.author}}</P>
         <P>Дата создания: {{post.created}}</P>
     </div>
-    <p>
-        Категории поста:
+    <p>Категории поста:
         {% for category in post.cats.all %}
             <br><strong>{{ category }}</strong>
-            {% if not user in category.subscribes.all %}
-                <button><a href="">Subscribe</a></button>
+            {% if not request.user in category.subscribes.all %}
+                <button><a href="{% url 'sub' category.pk user.pk %}">Subscribe</a></button>
             {% else %}
                 <button><a href="">Unsubscribe</a></button>
             {%endif%}

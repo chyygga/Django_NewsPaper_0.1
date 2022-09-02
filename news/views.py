@@ -71,22 +71,11 @@ class NewsDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
                            )
 
 
-# @login_required
-# def sub_me(request, **kwargs):
-#     user = User.objects.get(pk='user.id')
-#     cat = Category.objects.get(pk='category.id')
-#     cat.user_set.add(user)
-#
-#     return redirect('/')
+@login_required
+def sub_me(request):
+    user = User.objects.get(pk='user.pk')
+    cat = Category.objects.get(pk='category.pk')
+    cat.subscribes.add(user)
 
-
-class AddSub(LoginRequiredMixin, UpdateView):
-
-    def get_cat(self, **kwargs):
-        cat_id = self.kwargs.get('category.pk')
-        return Category.objects.get(pk=cat_id)
-    #
-    # def get_user(self, **kwargs):
-
-
+    return redirect('/')
 
